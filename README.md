@@ -92,3 +92,46 @@ carl was set free.
 ** (RuntimeError) server down. reason: :noproc
     (otp_tutorial) lib/otp_tutorial/server.ex:29: OtpTutorial.Server.call/2
 ```
+
+# GenKittyServer
+
+```elixir
+> {:ok, pid} = GenServer.start_link(OtpTutorial.GenKittyServer, [])
+{:ok, #PID<0.151.0>}
+
+> cat1 = OtpTutorial.GenKittyServer.order_cat(pid, "carl", "brown", "loves to burn bridges")
+%OtpTutorial.GenKittyServer.Cat{
+  color: "brown",
+  description: "loves to burn bridges",
+  name: "carl"
+}
+
+> OtpTutorial.GenKittyServer.return_cat(pid, cat1)
+:ok
+
+> OtpTutorial.GenKittyServer.order_cat(pid, "jimmy", "orange", "cuddly")
+%OtpTutorial.GenKittyServer.Cat{
+  color: "brown",
+  description: "loves to burn bridges",
+  name: "carl"
+}
+
+> OtpTutorial.GenKittyServer.order_cat(pid, "jimmy", "orange", "cuddly")
+%OtpTutorial.GenKittyServer.Cat{
+  color: "orange",
+  description: "cuddly",
+  name: "jimmy"
+}
+
+> OtpTutorial.GenKittyServer.return_cat(pid, cat1)
+:ok
+
+> OtpTutorial.GenKittyServer.close_shop(pid)
+carl was set free.
+:ok
+
+> OtpTutorial.GenKittyServer.close_shop(pid)
+** (exit) exited in: GenServer.call(#PID<0.151.0>, :terminate, 5000)
+    ** (EXIT) no process: the process is not alive or there's no process currently associated with the given name, possibly because its application isn't started
+    (elixir) lib/gen_server.ex:1010: GenServer.call/3
+```
