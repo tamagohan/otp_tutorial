@@ -3,15 +3,17 @@ defmodule OtpTutorial.NaiveKittyServer do
     defstruct [:name, :color, :description]
   end
 
+  # Client API
   def start_link() do
     spawn_link(&init/0)
   end
 
-  def init() do
+  # Server functions
+  defp init() do
     loop([])
   end
 
-  def loop(cats) do
+  defp loop(cats) do
     receive do
       {pid, ref, {:order, name, color, description}} ->
         if Enum.empty?(cats) do
@@ -40,6 +42,7 @@ defmodule OtpTutorial.NaiveKittyServer do
     :ok
   end
 
+  # Synchronous call
   def order_cat(pid, name, color, description) do
     ref = Process.monitor(pid)
     send(pid, {self(), ref, {:order, name, color, description}})
@@ -54,11 +57,13 @@ defmodule OtpTutorial.NaiveKittyServer do
     end
   end
 
+  # Asynchronous call
   def return_cat(pid, cat) do
     send(pid, {:return, cat})
     :ok
   end
 
+  # Synchronous call
   def close_shop(pid) do
     ref = Process.monitor(pid)
     send(pid, {self(), ref, :terminate})
