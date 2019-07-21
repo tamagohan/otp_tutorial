@@ -33,6 +33,7 @@ defmodule OtpTutorial.NaiveKittyServer do
     end
   end
 
+  # Private functions
   defp make_cat(name, color, description) do
     %Cat{name: name, color: color, description: description}
   end
